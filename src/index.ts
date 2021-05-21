@@ -33,6 +33,7 @@ router.post('/github', ctx => {
 
 	// シグネチャ比較
 	if (sig1.equals(sig2)) {
+		// @ts-ignore
 		handler.emit(ctx.headers['x-github-event'], ctx.request.body);
 		ctx.status = 204;
 	} else {
