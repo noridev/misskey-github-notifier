@@ -17,13 +17,21 @@ or you can create your own.
 
 ``` json
 {
-	"port": 3001, // Port on listen for webhooks
+	"port": 3001,
 	"proxy": "",
-	"hookSecret": "", // Webhook secret key from GitHub repository
-	"i": "", // CherryPick(or Misskey based client)'s user API token to post events
-	"instance": "" // URL of the instance to publish (do not include /)
+	"hookSecret": "",
+	"i": "",
+	"instance": ""
 }
 ```
+
+- **port**: Port on listen for webhooks
+
+- **hookSecret**: Webhook secret key from GitHub repository
+
+- **i**: CherryPick(or Misskey based client)'s user API token to post events
+
+- **instance**: URL of the instance to publish (do not include /)
 
 *2.* Build and run
 ----------------------------------------------------------------
