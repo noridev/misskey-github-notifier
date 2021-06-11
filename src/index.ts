@@ -5,7 +5,7 @@ import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
 const crypto = require('crypto');
-const config = require('../config.json');
+const config = require('../.config/config.json');
 
 const handler = new EventEmitter();
 
