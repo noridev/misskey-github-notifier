@@ -130,7 +130,7 @@ handler.on('release', event => {
 		case 'published': text = `$[twitch 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
 		default: return;
 	}
-	post(text);
+	post(text, false);
 });
 
 handler.on('watch', event => {
