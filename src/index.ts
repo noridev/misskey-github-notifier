@@ -5,7 +5,7 @@ import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
 const crypto = require('crypto');
-const config = require('../.config/config.json');
+const config = require('../config.json');
 
 const handler = new EventEmitter();
 
@@ -13,7 +13,10 @@ const post = async (text: string, home = true) => {
 	request.post(config.instance + '/api/notes/create', {
 		json: {
 			i: config.i,
-			text, visibility: home ? 'home' : 'public'
+			text,
+			visibility: home ? 'home' : 'public',
+			noExtractMentions: true,
+			noExtractHashtags: true
 		}
 	});
 };
@@ -33,8 +36,8 @@ router.post('/github', ctx => {
 
 	// シグネチャ比較
 	if (sig1.equals(sig2)) {
-		handler.emit(ctx.headers['x-github-event'], ctx.request.body);
-		console.log(`GitHubHook: ${JSON.stringify(ctx.request.body)}`);
+		let ghHeader = ctx.headers['x-github-event'] as string;
+		handler.emit(ghHeader, ctx.request.body);
 		ctx.status = 204;
 	} else {
 		ctx.status = 400;
@@ -44,8 +47,6 @@ router.post('/github', ctx => {
 app.use(router.routes());
 
 const server = http.createServer(app.callback());
-
-server.requestTimeout = 60 * 1000;
 
 server.listen(config.port);
 
@@ -73,9 +74,9 @@ handler.on('status', event => {
 				const parentState = parentStatuses[0]?.state;
 				const stillFailed = parentState === 'failure' || parentState === 'error';
 				if (stillFailed) {
-					post(`⚠️**BUILD STILL FAILED**⚠️: ?[${commit.commit.message}](${commit.html_url})`);
+					post(`⚠️ **BUILD STILL FAILED** ⚠️: ?[${commit.commit.message}](${commit.html_url})`);
 				} else {
-					post(`🚨**BUILD FAILED**🚨: →→→?[${commit.commit.message}](${commit.html_url})←←←`);
+					post(`🚨 **BUILD FAILED** 🚨: → ?[${commit.commit.message}](${commit.html_url}) ←`);
 				}
 			});
 			break;
@@ -102,12 +103,12 @@ handler.on('issues', event => {
 	const action = event.action;
 	let title: string;
 	switch (action) {
-		case 'opened': title = '$[shake 💥] Issue opened'; break;
-		case 'closed': title = '💮 Issue closed'; break;
-		case 'reopened': title = '$[shake 🔥] Issue reopened'; break;
+		case 'opened': title = `💥 Issue opened`; break;
+		case 'closed': title = `💮 Issue closed`; break;
+		case 'reopened': title = `🔥 Issue reopened`; break;
 		default: return;
 	}
-	post(`${title}: <${issue.number}>「${issue.title}」\n${issue.html_url}`);
+	post(`${title}: #${issue.number} "${issue.title}"\n${issue.html_url}`);
 });
 
 handler.on('issue_comment', event => {
@@ -116,7 +117,7 @@ handler.on('issue_comment', event => {
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'created': text = `💬 Commented to「${issue.title}」:${comment.user.login}「${comment.body}」\n${comment.html_url}`; break;
+		case 'created': text = `💬 Commented on "${issue.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
@@ -127,21 +128,21 @@ handler.on('release', event => {
 	const release = event.release;
 	let text: string;
 	switch (action) {
-		case 'published': text = `$[twitch 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
+		case 'published': text = `🎁 **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out. Enjoy!`; break;
 		default: return;
 	}
-	post(text, false);
+	post(text);
 });
 
 handler.on('watch', event => {
 	const sender = event.sender;
-	post(`$[jelly ⭐️] Starred by ?[**${sender.login}**](${sender.html_url}) $[jelly ⭐️]`, false);
+	post(`$[spin ⭐️] Starred by ?[**${sender.login}**](${sender.html_url})`, false);
 });
 
 handler.on('fork', event => {
 	const sender = event.sender;
 	const repo = event.forkee;
-	post(`🍴 ?[Forked](${repo.html_url}) by ?[**${sender.login}**](${sender.html_url}) 🍴`);
+	post(`$[spin.y 🍴] ?[Forked](${repo.html_url}) by ?[**${sender.login}**](${sender.html_url})`);
 });
 
 handler.on('pull_request', event => {
@@ -149,14 +150,16 @@ handler.on('pull_request', event => {
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'opened': text = `📦 New Pull Request:「${pr.title}」\n${pr.html_url}`; break;
-		case 'reopened': text = `🗿 Pull Request Reopened:「${pr.title}」\n${pr.html_url}`; break;
+		case 'opened': text = `📦 New Pull Request: "${pr.title}"\n${pr.html_url}`; break;
+		case 'reopened': text = `🗿 Pull Request Reopened: "${pr.title}"\n${pr.html_url}`; break;
 		case 'closed':
 			text = pr.merged
-				? `💯 Pull Request Merged!:「${pr.title}」\n${pr.html_url}`
-				: `🚫 Pull Request Closed:「${pr.title}」\n${pr.html_url}`;
+				? `💯 Pull Request Merged!: "${pr.title}"\n${pr.html_url}`
+				: `🚫 Pull Request Closed: "${pr.title}"\n${pr.html_url}`;
 			break;
 		default: return;
 	}
 	post(text);
 });
+
+console.log("🚀 Ready! 🚀")
