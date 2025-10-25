@@ -20,36 +20,35 @@ Make a file called `config.json` and put your JSON into it to configure the bot.
 
 ``` json
 {
-	"port": 3001,
-	"proxy": "",
-	"hookSecret": "",
+	"instance": "",
 	"i": "",
-	"instance": ""
+	"hookSecret": "",
+	"port": 8080,
+	"proxy": ""
 }
 ```
-
-- **port**: Port on listen for webhooks
-
-- **hookSecret**: Webhook secret key from GitHub repository
+- **instance**: URL of the instance to publish (do not include /)
 
 - **i**: CherryPick(or Misskey based client)'s user API token to post events
 
-- **instance**: URL of the instance to publish (do not include /)
+- **hookSecret**: Webhook secret key from GitHub repository
+
+- **port**: Port on listen for webhooks
 
 *2.* Build and run
 ----------------------------------------------------------------
 
 ### 1. Install dependencies
 	 
-`npm i`
+`pnpm i --frozen-lockfile`
 
 ### 2. Build
 
-`NODE_ENV=production yarn build`
+`NODE_ENV=production pnpm run build`
 
 ### 3. Run
 
-`NODE_ENV=production npm start`
+`NODE_ENV=production pnpm run start`
 
 ### 4. Done!
 Now, whenever a new event occurs in the GitHub repository, a note is published by the specified user!
