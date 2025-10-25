@@ -1,4 +1,5 @@
 .config/config.json
+config.json
 /built
 yarn.lock
 package-lock.json
@@ -72,3 +73,6 @@ typings/
 
 # Intelij-IDEA
 /.idea
+
+# Serena
+.serena
