@@ -72,7 +72,7 @@ handler.on('status', event => {
 				url: `${parent.url}/statuses`,
 				proxy: config.proxy,
 				headers: {
-					'User-Agent': 'cherrypick' || 'misskey'
+					'User-Agent': 'cherrypick'
 				}
 			}, (err, res, body) => {
 				if (err) {
