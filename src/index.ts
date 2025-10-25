@@ -22,7 +22,7 @@ const post = async (text: string, home = false) => {
 		? config.instance.substring(0, config.instance.length - 1)
 		: config.instance;
 
-	await fetch(`${instance}/api/notes/create`, {
+	const response = await fetch(`${instance}/api/notes/create`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -34,7 +34,10 @@ const post = async (text: string, home = false) => {
 			noExtractMentions: true,
 			noExtractHashtags: true,
 		}),
-	})
+	});
+
+	const result = await response.json();
+	console.log('Created note:', result);
 };
 
 const app = new Koa();
