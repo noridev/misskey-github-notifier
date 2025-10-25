@@ -51,6 +51,9 @@ router.post('/github', ctx => {
 	} else {
 		ctx.status = 400;
 	}
+
+	console.log(`GitHubHook: ${JSON.stringify(ctx.request.body)}`);
+	console.log(`GitHubHook Status: ${ctx.status}`);
 });
 
 app.use(router.routes());
