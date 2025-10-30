@@ -5,12 +5,12 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@types/koa": "2.15.0",
+    "@types/koa": "3.0.1",
     "@types/koa-bodyparser": "5.0.2",
     "@types/koa-router": "7.4.8",
     "@types/node": "22.14.1",
     "@types/request": "2.48.12",
-    "koa": "2.16.1",
+    "koa": "3.1.1",
     "koa-bodyparser": "4.4.1",
     "koa-router": "13.0.1",
     "ts-node": "10.9.2",
