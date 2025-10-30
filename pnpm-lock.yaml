@@ -27,8 +27,8 @@ dependencies:
     specifier: 4.4.1
     version: 4.4.1
   koa-router:
-    specifier: 13.0.1
-    version: 13.0.1
+    specifier: 14.0.0
+    version: 14.0.0
   ts-node:
     specifier: 10.9.2
     version: 10.9.2(@types/node@22.14.1)(typescript@5.8.3)
@@ -641,14 +641,17 @@ packages:
       koa-compose: 4.1.0
     dev: false
 
-  /koa-router@13.0.1:
-    resolution: {integrity: sha512-4/sijXdSxocIe2wv7RFFSxvo2ic1pDzPSmy11yCGztng1hx408qfw1wVmN3aqhQaU7U6nJ039JKC8ObE73Ohgw==}
-    engines: {node: '>= 18'}
+  /koa-router@14.0.0:
+    resolution: {integrity: sha512-Ue8f/PRsLLNm6b7y+eS6xkqvsG2xH11d2VB1HPcfdfW6p5736kCHf2pXaq8q9XPQ01x0Dk7V/P5Il9pe+tGTxA==}
+    engines: {node: '>= 20'}
     deprecated: 'Please use @koa/router instead, starting from v9! '
     dependencies:
+      debug: 4.4.3
       http-errors: 2.0.0
       koa-compose: 4.1.0
       path-to-regexp: 8.3.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /koa@2.16.1:
